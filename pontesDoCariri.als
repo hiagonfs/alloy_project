@@ -1,11 +1,11 @@
 module cidade
 
--- Cidade única que possui um conjunto de pontes.
+-- Cidade única que possui um conjunto de regioes
 one sig Cidade {
 	regioes : set Regiao
 }
 
--- Regiao Generica que possui o conjunto de todas as regioes da cidade
+-- Regiao Generica que possui o conjunto de todas as pontes da cidade
 abstract sig Regiao {
 	pontes : set Ponte
 }
