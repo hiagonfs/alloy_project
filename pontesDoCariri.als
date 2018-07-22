@@ -16,5 +16,11 @@ one sig RegiaoW extends Regiao {}
 one sig RegiaoS extends Regiao {}
 one sig RegiaoE extends Regiao {}
 
+-- VIajante que ira atravessar as pontes 
+one sig Viajante {
+	caminhos : set Caminho
+}
+
+-- 
 
  
