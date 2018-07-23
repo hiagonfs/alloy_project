@@ -1,26 +1,44 @@
-module cidade
+module pontesCariri
 
--- Cidade única que possui um conjunto de regioes
-one sig Cidade {
-	regioes : set Regiao
+-- Cidade que possui todas as regioes
+sig City {
+	regions : set Region
 }
 
--- Regiao Generica que possui o conjunto de todas as pontes da cidade
-abstract sig Regiao {
-	pontes : set Ponte
-}
+-- Regiao generica
+abstract sig Region {}
 
 -- Regioes especificas da cidade
-one sig RegiaoN extends Regiao {}
-one sig RegiaoW extends Regiao {}
-one sig RegiaoS extends Regiao {}
-one sig RegiaoE extends Regiao {}
+one sig RegionN extends  Region {}
+one sig RegionW extends  Region {}
+one sig RegionS extends  Region {}
+one sig RegionE extends  Region {}
 
--- VIajante que ira atravessar as pontes 
-one sig Viajante {
-	caminhos : set Caminho
+sig Direction {}
+
+-- Definicao de ponte
+abstract sig Bridge {}
+
+-- Pontes especificas do problema
+one sig BridgeA extends Bridge {}  
+one sig BridgeB extends Bridge {}
+one sig BridgeC extends Bridge {}
+one sig BridgeD extends Bridge {}
+one sig BridgeE extends Bridge {}
+one sig BridgeF extends Bridge {}
+one sig BridgeG extends Bridge {}
+
+fact cityRegions {
+	Region = RegionN + RegionW + RegionS + RegionE	
 }
 
--- 
+fact cityAll { City = Region }
 
+-- Fato representando a quantidade de pontes existentes na cidade, que interliga as regioes
+fact numberBridges {
+	#Bridge = 7
+}
+
+pred show[]{}
+run show 
  
