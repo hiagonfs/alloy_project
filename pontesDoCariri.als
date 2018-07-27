@@ -1,50 +1,83 @@
 module pontesCariri
 
-one sig City {
-	regions: set Region
+-- Criando uma cidade que contera todas as 4 regioes
+one sig Cidade {
+	regioes: set Regiao
 }
 
-abstract sig Region {}
+-- Criando uma regiao generica
+abstract sig Regiao {}
 
-one sig RegionN extends Region {
-	bridgeNW1: BridgeNW1,
-	bridgeNW2: BridgeNW2,
-	bridgeNE: BridgeNE 
+-- Criando uma regiao e associando pontes a ela
+one sig RegionN extends Regiao {
+	bridgeNW1: PonteNW1,
+	bridgeNW2: PonteNW2,
+	bridgeNE: PonteNE 
 }
 
-one sig RegionW extends Region {
-	bridgeNW1: one BridgeNW1,
-	bridgeNW2: one BridgeNW2,
-	bridgeWS1: one BridgeWS1,
-	bridgeWS2: one BridgeWS2,
-	bridgeWE: one BridgeWE
+one sig RegionW extends Regiao {
+	bridgeNW1: one PonteNW1,
+	bridgeNW2: one PonteNW2,
+	bridgeWS1: one PonteWS1,
+	bridgeWS2: one PonteWS2,
+	bridgeWE: one PonteWE
 }
 
-one sig RegionS extends Region {
-	bridgeWS1: one BridgeWS1,
-	bridgeWS2: one BridgeWS2,
-	bridgeES: one BridgeES
+one sig RegionS extends Regiao {
+	bridgeWS1: one PonteWS1,
+	bridgeWS2: one PonteWS2,
+	bridgeES: one PonteES
 }
 
-one sig RegionE extends Region {
-	bridgeES: one BridgeES,
-	bridgeNE: one BridgeNE,
-	bridgeWE: one BridgeWE
+one sig RegionE extends Regiao {
+	bridgeES: one PonteES,
+	bridgeNE: one PonteNE,
+	bridgeWE: one PonteWE
 }
 
-abstract sig Bridge {}
+-- Criando uma status generico
+abstract sig Status {}
 
-one sig BridgeNW1 extends Bridge {}
-one sig BridgeNW2 extends Bridge {}
-one sig BridgeWS1 extends Bridge {}
-one sig BridgeWS2 extends Bridge {}
-one sig BridgeES extends Bridge {}
-one sig BridgeWE extends Bridge {}
-one sig BridgeNE extends Bridge {}
+-- Criando status especificos do problema para cobrir as pontes
+sig Visitado extends Status {
+	pontes : set Ponte
+}
+sig NaoVisitado extends Status {
+	pontes : set Ponte
+}
 
+-- Criando uma ponte generica
+sig Ponte {
+	status : one Status
+}
 
-fact cityRegions {
-	all c:City | #c.regions = 4
+-- Criando pontes especificas do problema 
+one sig PonteNW1 extends Ponte {}
+one sig PonteNW2 extends Ponte {}
+one sig PonteWS1 extends Ponte {}
+one sig PonteWS2 extends Ponte {}
+one sig PonteES extends Ponte {}
+one sig PonteWE extends Ponte {}
+one sig PonteNE extends Ponte {}
+
+-- Funcao que associa cada ponte a um status
+fact Status {
+	all s:Status | one s.~status 
+}
+
+-- Predicado que verifica se a ponte tem um Status associado a ela
+pred ponteTemStatus[p: Ponte, s: Status] {
+	s in p.status
+}
+
+-- Fato que define a quantidade maxima de regioes
+fact qtdRegioes {
+	all c:Cidade | #c.regioes = 4
+}
+
+-- Assert que verifica se a quantidade fixa definida foi atendida
+assert maximoDePontes {
+	all c:Cidade | #(c.regioes) = 4
 }
 
 pred show[]{}
