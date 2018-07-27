@@ -1,17 +1,13 @@
 module pontesCariri
 
 -- Criando uma cidade que contera todas as 4 regioes
-one sig Cidade {
-	regioes: set Regiao
-}
+one sig Cidade { regioes: set Regiao }
 
 -- Criando uma regiao generica
 abstract sig Regiao {}
 
 -- Criando uma ponte generica
-sig Ponte {
-	status : one Status
-}
+sig Ponte { status : one Status }
 
 -- Criando uma regiao e associando pontes a ela
 one sig RegionN extends Regiao {
@@ -57,19 +53,18 @@ one sig PonteWE extends Ponte {}
 one sig PonteNE extends Ponte {}
 
 -- Fato que define a quantidade fixa de regioes
-fact qtdRegioes {
-	all c:Cidade | #c.regioes = 4
-}
+fact { all c:Cidade | #c.regioes = 4}
 
--- Especificar que ambs os status serão sempre utilizados
-fact associaStatus {
-	
-}
+-- Para tornar o problema verdadeiro, existencialmente, existira uma ponte que nao sera visitada, pela logica do problema
+fact { some p:Ponte | p.status = NaoVisitado }
 
 -- Assert que verifica se a quantidade fixa definida foi atendida
-assert maximoDePontes {
-	all c:Cidade | #(c.regioes) = 4
-}
+assert maximoDePontes {all c:Cidade | #(c.regioes) = 4}
+
+-- Verifica se Toda Ponte possui um status associado a ela
+assert todaPonteTemStatus {all p:Ponte | some p.status}
+
+check maximoDePontes 
 
 pred show[]{}
 run show
