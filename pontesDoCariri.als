@@ -9,7 +9,9 @@ one sig Cidade {
 abstract sig Regiao {}
 
 -- Criando uma ponte generica
-abstract sig Ponte {}
+sig Ponte {
+	status : one Status
+}
 
 -- Criando uma regiao e associando pontes a ela
 one sig RegionN extends Regiao {
@@ -46,17 +48,22 @@ sig Visitado extends Status {}
 sig NaoVisitado extends Status {}
 
 -- Criando pontes especificas do problema 
-one sig PonteNW1 extends Ponte {a : one Status}
-one sig PonteNW2 extends Ponte {b : one Status}
-one sig PonteWS1 extends Ponte {c : one Status}
-one sig PonteWS2 extends Ponte {d : one Status}
-one sig PonteES extends Ponte {e : one Status}
-one sig PonteWE extends Ponte {f : one Status}
-one sig PonteNE extends Ponte {g : one Status}
+one sig PonteNW1 extends Ponte {}
+one sig PonteNW2 extends Ponte {}
+one sig PonteWS1 extends Ponte {}
+one sig PonteWS2 extends Ponte {}
+one sig PonteES extends Ponte {}
+one sig PonteWE extends Ponte {}
+one sig PonteNE extends Ponte {}
 
--- Fato que define a quantidade maxima de regioes
+-- Fato que define a quantidade fixa de regioes
 fact qtdRegioes {
 	all c:Cidade | #c.regioes = 4
+}
+
+-- Especificar que ambs os status serão sempre utilizados
+fact associaStatus {
+	
 }
 
 -- Assert que verifica se a quantidade fixa definida foi atendida
