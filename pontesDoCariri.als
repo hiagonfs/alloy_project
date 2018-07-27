@@ -80,5 +80,9 @@ assert maximoDePontes {
 	all c:Cidade | #(c.regioes) = 4
 }
 
+-- Assert que verifica se cada ponte possui um status associado
+assert statusAssociadoAPonte {
+	all p: Ponte | one s: Status | ponteTemStatus[p,s]
+}
 pred show[]{}
 run show
