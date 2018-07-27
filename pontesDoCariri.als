@@ -1,70 +1,54 @@
 module pontesCariri
 
 -- Criando uma cidade que contera todas as 4 regioes
-one sig Cidade { regioes: set Regiao }
+abstract sig Cidade {}
 
--- Criando uma regiao generica
-abstract sig Regiao {}
+-- Criando as regioes da cidade
+one sig N extends Cidade {}
+one sig E extends Cidade {}
+one sig W extends Cidade {}
+one sig S extends Cidade {}
 
--- Criando uma ponte generica
-sig Ponte { status : one Status }
+-- Ponte generica para o problema
+abstract sig Ponte {
+	conexoes : set Cidade 
+} 
 
--- Criando uma regiao e associando pontes a ela
-one sig RegionN extends Regiao {
-	bridgeNW1: PonteNW1,
-	bridgeNW2: PonteNW2,
-	bridgeNE: PonteNE 
+-- Pontes especificas do problema, utilizando uniao para representar as conexoes especificas do problema
+one sig Ponte1 extends Ponte {} {conexoes = N + W}
+one sig Ponte2 extends Ponte {} {conexoes= N + W}
+one sig Ponte3 extends Ponte {} {conexoes = S + W}
+one sig Ponte4 extends Ponte {} {conexoes = S + W}
+one sig Ponte5 extends Ponte {} {conexoes = E + W}
+one sig Ponte6 extends Ponte {} {conexoes = E + S}
+one sig Ponte7 extends Ponte {} {conexoes = N + E}
+
+-- Deifinicao de um caminho para cobertura das pontes
+sig Caminho { 
+	passoInicial : Passo 
 }
 
-one sig RegionW extends Regiao {
-	bridgeNW1: one PonteNW1,
-	bridgeNW2: one PonteNW2,
-	bridgeWS1: one PonteWS1,
-	bridgeWS2: one PonteWS2,
-	bridgeWE: one PonteWE
+-- Definicao do passo para caminhar pelas pontes
+sig Passo {
+	de, para: Cidade,
+	via: Ponte,
+	proximoPasso : lone Passo } {via.conexoes = de + para}
+
+-- Funcao para caminhar pelas pontes, sendo que depois um passo vem o poximo
+fun passos (c:Caminho) : set Passo {
+	c.passoInicial.*proximoPasso
 }
 
-one sig RegionS extends Regiao {
-	bridgeWS1: one PonteWS1,
-	bridgeWS2: one PonteWS2,
-	bridgeES: one PonteES
+-- Predicado que cobre todas as pontes, um caminho gerado que consegue a cobertura total
+pred caminho {
+	some c:Caminho | passos[c].via = Ponte
 }
 
-one sig RegionE extends Regiao {
-	bridgeES: one PonteES,
-	bridgeNE: one PonteNE,
-	bridgeWE: one PonteWE
-}
+-- Fato que gera o caminho para "atravessarmos" as pontes
+fact {all p:Passo, proximo:p.proximoPasso | proximo.de = p.para}
 
--- Criando uma status generico
-abstract sig Status {}
-
--- Criando status especificos do problema para cobrir as pontes
-sig Visitado extends Status {}
-sig NaoVisitado extends Status {}
-
--- Criando pontes especificas do problema 
-one sig PonteNW1 extends Ponte {}
-one sig PonteNW2 extends Ponte {}
-one sig PonteWS1 extends Ponte {}
-one sig PonteWS2 extends Ponte {}
-one sig PonteES extends Ponte {}
-one sig PonteWE extends Ponte {}
-one sig PonteNE extends Ponte {}
-
--- Fato que define a quantidade fixa de regioes
-fact { all c:Cidade | #c.regioes = 4}
-
--- Para tornar o problema verdadeiro, existencialmente, existira uma ponte que nao sera visitada, pela logica do problema
-fact { some p:Ponte | p.status = NaoVisitado }
-
--- Assert que verifica se a quantidade fixa definida foi atendida
-assert maximoDePontes {all c:Cidade | #(c.regioes) = 4}
-
--- Verifica se Toda Ponte possui um status associado a ela
-assert todaPonteTemStatus {all p:Ponte | some p.status}
-
-check maximoDePontes 
+-- Fato que define a quantiade de conexoes
+fact {all p:Ponte | #p.conexoes = 2}
 
 pred show[]{}
 run show
