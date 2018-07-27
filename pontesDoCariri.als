@@ -8,6 +8,9 @@ one sig Cidade {
 -- Criando uma regiao generica
 abstract sig Regiao {}
 
+-- Criando uma ponte generica
+abstract sig Ponte {}
+
 -- Criando uma regiao e associando pontes a ela
 one sig RegionN extends Regiao {
 	bridgeNW1: PonteNW1,
@@ -39,36 +42,17 @@ one sig RegionE extends Regiao {
 abstract sig Status {}
 
 -- Criando status especificos do problema para cobrir as pontes
-sig Visitado extends Status {
-	pontes : set Ponte
-}
-sig NaoVisitado extends Status {
-	pontes : set Ponte
-}
-
--- Criando uma ponte generica
-sig Ponte {
-	status : one Status
-}
+sig Visitado extends Status {}
+sig NaoVisitado extends Status {}
 
 -- Criando pontes especificas do problema 
-one sig PonteNW1 extends Ponte {}
-one sig PonteNW2 extends Ponte {}
-one sig PonteWS1 extends Ponte {}
-one sig PonteWS2 extends Ponte {}
-one sig PonteES extends Ponte {}
-one sig PonteWE extends Ponte {}
-one sig PonteNE extends Ponte {}
-
--- Funcao que associa cada ponte a um status
-fact Status {
-	all s:Status | one s.~status 
-}
-
--- Predicado que verifica se a ponte tem um Status associado a ela
-pred ponteTemStatus[p: Ponte, s: Status] {
-	s in p.status
-}
+one sig PonteNW1 extends Ponte {a : one Status}
+one sig PonteNW2 extends Ponte {b : one Status}
+one sig PonteWS1 extends Ponte {c : one Status}
+one sig PonteWS2 extends Ponte {d : one Status}
+one sig PonteES extends Ponte {e : one Status}
+one sig PonteWE extends Ponte {f : one Status}
+one sig PonteNE extends Ponte {g : one Status}
 
 -- Fato que define a quantidade maxima de regioes
 fact qtdRegioes {
@@ -80,9 +64,5 @@ assert maximoDePontes {
 	all c:Cidade | #(c.regioes) = 4
 }
 
--- Assert que verifica se cada ponte possui um status associado
-assert statusAssociadoAPonte {
-	all p: Ponte | one s: Status | ponteTemStatus[p,s]
-}
 pred show[]{}
 run show
