@@ -50,5 +50,7 @@ fact {all p:Passo, proximo:p.proximoPasso | proximo.de = p.para}
 -- Fato que define a quantiade de conexoes
 fact {all p:Ponte | #p.conexoes = 2}
 
+
+run show for 3
 pred show[]{}
 run show
