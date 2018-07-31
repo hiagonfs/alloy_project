@@ -1,6 +1,6 @@
 module pontesCariri
 
--- Criando uma cidade que contera todas as 4 regioes
+-- Criando uma cidade generica
 abstract sig Cidade {}
 
 -- Criando as regioes da cidade
@@ -9,12 +9,12 @@ one sig E extends Cidade {}
 one sig W extends Cidade {}
 one sig S extends Cidade {}
 
--- Ponte generica para o problema
+-- Ponte generica para o problema, a ponte servira de conexao para as regioes da cidade.
 abstract sig Ponte {
 	conexoes : set Cidade 
 } 
 
--- Pontes especificas do problema, utilizando uniao para representar as conexoes especificas do problema
+-- Pontes especificas do problema, utilizando uniao para representar as conexoes especificas entre as regioes do problema do problema.
 one sig Ponte1 extends Ponte {} {conexoes = N + W}
 one sig Ponte2 extends Ponte {} {conexoes= N + W}
 one sig Ponte3 extends Ponte {} {conexoes = S + W}
@@ -23,7 +23,7 @@ one sig Ponte5 extends Ponte {} {conexoes = E + W}
 one sig Ponte6 extends Ponte {} {conexoes = E + S}
 one sig Ponte7 extends Ponte {} {conexoes = N + E}
 
--- Deifinicao de um caminho para cobertura das pontes
+-- Definicao de um caminho para cobertura das pontes, contendo um passo inicial. 
 sig Caminho { 
 	passoInicial : Passo 
 }
