@@ -28,18 +28,18 @@ sig Caminho {
 	passoInicial : Passo 
 }
 
--- Definicao do passo para caminhar pelas pontes
+-- Definicao do passo para caminhar pelas pontes, o passo começa de um lado da ponte e termina do outro lado da mesma.
 sig Passo {
 	de, para: Cidade,
 	via: Ponte,
 	proximoPasso : lone Passo } {via.conexoes = de + para}
 
--- Funcao para caminhar pelas pontes, sendo que depois um passo vem o poximo
+-- Funcao para caminhar pelas pontes, o destino do passo atual é o começo do próximo.
 fun passos (c:Caminho) : set Passo {
 	c.passoInicial.*proximoPasso
 }
 
--- Predicado que cobre todas as pontes, um caminho gerado que consegue a cobertura total
+-- Predicado que cobre todas as pontes, um caminho gerado que consegue a cobertura total, uma caminho que cubra todas as pontes.
 pred caminho {
 	some c:Caminho | passos[c].via = Ponte
 }
