@@ -1,6 +1,6 @@
 module pontesCariri
 
--- Criando uma cidade generica
+-- Criando uma cidade generica.
 abstract sig Cidade {}
 
 -- Criando as regioes da cidade
@@ -24,7 +24,7 @@ one sig Ponte6 extends Ponte {} {conexoes = Sul + Oeste}
 one sig Ponte7 extends Ponte {} {conexoes = Sul + Oeste}
 
 -- Definicao de um caminho para cobertura das pontes, contendo um passo inicial. 
-sig Caminho { 
+one sig Caminho { 
 	passoInicial : Passo 
 }
 
@@ -32,7 +32,7 @@ sig Caminho {
 sig Passo {
 	de, para: Cidade,
 	via: Ponte,
-	proximoPasso : lone Passo } {via.conexoes = de + para}
+	proximoPasso : lone Passo} {via.conexoes = de + para}
 
 -- Funcao para caminhar pelas pontes, o destino do passo atual é o começo do próximo.
 fun passos (c:Caminho) : set Passo {
@@ -44,11 +44,24 @@ pred caminho {
 	some c:Caminho | passos[c].via = Ponte
 }
 
--- Fato que gera o caminho para "atravessarmos" as pontes
+-- Fato que gera o caminho para "atravessarmos" as pontes.
 fact {all p:Passo, proximo:p.proximoPasso | proximo.de = p.para}
 
--- Fato que define a quantiade de conexoes
+-- Fato que garante que sempre ocorrerá próximos passos, para não ocorrer passos "flutuantes" no modelo. 
+fact {all p:Passo, c:Caminho | (some p1:Passo | p = p1.proximoPasso or p = c.passoInicial)}
+
+-- Fato que garante que se um passo atravessar uma ponte e outro passo atravessar a mesma ponte, então esse passos serão iguais.
+fact {all a,b:Passo | (a.via = b.via) implies (a = b)}
+
+-- Fato que define a quantiade de conexoes.
 fact {all p:Ponte | #p.conexoes = 2}
+
+-- Assert que garante que nao tera caminho vazio, pois nao faz sentido.
+assert garanteNaoTemCaminhoVazio { all c:Caminho | some c.passoInicial }
+
+assert garantePrecedenciaDePassos {all p:Passo | some q:Passo, c:Caminho | p = q.proximoPasso or p = c.passoInicial}
+
+assert contemCaminho {#Caminho >= 1}
 
 pred show[]{}
 run show
