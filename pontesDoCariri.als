@@ -4,10 +4,10 @@ module pontesCariri
 abstract sig Cidade {}
 
 -- Criando as regioes da cidade
-one sig N extends Cidade {}
-one sig E extends Cidade {}
-one sig W extends Cidade {}
-one sig S extends Cidade {}
+one sig Norte extends Cidade {}
+one sig Leste extends Cidade {}
+one sig Oeste extends Cidade {}
+one sig Sul extends Cidade {}
 
 -- Ponte generica para o problema, a ponte servira de conexao para as regioes da cidade.
 abstract sig Ponte {
@@ -15,13 +15,13 @@ abstract sig Ponte {
 } 
 
 -- Pontes especificas do problema, utilizando uniao para representar as conexoes especificas entre as regioes do problema do problema.
-one sig Ponte1 extends Ponte {} {conexoes = N + W}
-one sig Ponte2 extends Ponte {} {conexoes= N + W}
-one sig Ponte3 extends Ponte {} {conexoes = S + W}
-one sig Ponte4 extends Ponte {} {conexoes = S + W}
-one sig Ponte5 extends Ponte {} {conexoes = E + W}
-one sig Ponte6 extends Ponte {} {conexoes = E + S}
-one sig Ponte7 extends Ponte {} {conexoes = N + E}
+one sig Ponte1 extends Ponte {} {conexoes = Norte + Oeste}
+one sig Ponte2 extends Ponte {} {conexoes = Norte + Oeste}
+one sig Ponte3 extends Ponte {} {conexoes =  Norte + Leste}
+one sig Ponte4 extends Ponte {} {conexoes = Leste + Oeste}
+one sig Ponte5 extends Ponte {} {conexoes = Leste + Sul}
+one sig Ponte6 extends Ponte {} {conexoes = Sul + Oeste}
+one sig Ponte7 extends Ponte {} {conexoes = Sul + Oeste}
 
 -- Definicao de um caminho para cobertura das pontes, contendo um passo inicial. 
 sig Caminho { 
@@ -50,7 +50,5 @@ fact {all p:Passo, proximo:p.proximoPasso | proximo.de = p.para}
 -- Fato que define a quantiade de conexoes
 fact {all p:Ponte | #p.conexoes = 2}
 
-
-run show for 3
 pred show[]{}
 run show
