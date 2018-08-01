@@ -59,8 +59,10 @@ fact {all p:Ponte | #p.conexoes = 2}
 -- Assert que garante que nao tera caminho vazio, pois nao faz sentido.
 assert garanteNaoTemCaminhoVazio { all c:Caminho | some c.passoInicial }
 
+-- Assert que garante a precedencia de passos, em passo inicial e proximo para outros casos. 
 assert garantePrecedenciaDePassos {all p:Passo | some q:Passo, c:Caminho | p = q.proximoPasso or p = c.passoInicial}
 
+-- Assert que garante a existencia de pelo menos um caminho.
 assert contemCaminho {#Caminho >= 1}
 
 pred show[]{}
